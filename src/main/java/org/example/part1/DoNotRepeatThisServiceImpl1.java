@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Scope(value = "prototype", proxyMode = ScopedProxyMode.INTERFACES)
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DoNotRepeatThisServiceImpl1 implements DoNotRepeatThisService {
     private final Repo repo;
     private final Transformer transformer;
@@ -35,5 +35,9 @@ public class DoNotRepeatThisServiceImpl1 implements DoNotRepeatThisService {
 
     private void save() {
         repo.save(key, data);
+    }
+
+    public String getKey() {
+        return key;
     }
 }
