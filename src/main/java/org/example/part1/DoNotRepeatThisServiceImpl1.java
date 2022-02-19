@@ -1,10 +1,13 @@
 package org.example.part1;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Scope(value = "prototype", proxyMode = ScopedProxyMode.INTERFACES)
 public class DoNotRepeatThisServiceImpl1 implements DoNotRepeatThisService {
     private final Repo repo;
     private final Transformer transformer;
