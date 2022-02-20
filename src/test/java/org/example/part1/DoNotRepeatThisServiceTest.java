@@ -52,6 +52,9 @@ class DoNotRepeatThisServiceTest {
         Integer result = service.execute(key);
 
         assertEquals(calcExpected(key), result);
+        if (service instanceof DoNotRepeatThisServiceImpl1 srv) {
+            assertEquals(key, srv.getKey());
+        }
     }
 
     @Test
