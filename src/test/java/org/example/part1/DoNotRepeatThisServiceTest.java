@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(classes = {
         DoNotRepeatThisServiceImpl1.class,
 //        DoNotRepeatThisServiceImpl2.class,
+//        DoNotRepeatThisServiceImpl3.class,
         Repo.class,
         Transformer.class,
 })
