@@ -50,6 +50,9 @@ public class ControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    Controller controller;
+
     @Test
     void functionalTestMsk() {
         final String coord = MSK;
@@ -102,6 +105,24 @@ public class ControllerTest {
         softAssertions.assertAll();
     }
 
+    @Test
+    public void stressWithCheckWithoutWebTest() {
+        SoftAssertions softAssertions = new SoftAssertions();
+
+        IntStream.rangeClosed(1, 1000)
+                .boxed()
+                .map(it -> it % 2 == 0 ? MSK : SPB)
+                .parallel()
+                .forEach(it -> {
+                    ApiAnswer result = doRequestWithoutWeb(it);
+                    assertNotNull(result);
+                    softAssertions.assertThat(result)
+                            .matches(ans -> isValid(it, ans), "Rq: " + it);
+                });
+
+        softAssertions.assertAll();
+    }
+
     @SneakyThrows
     ApiAnswer doRequest(String coord) {
         final ApiQuestion question = new ApiQuestion(new Person("Ярик", true, coord));
@@ -117,6 +138,12 @@ public class ControllerTest {
                 .getContentAsString();
 
         return objectMapper.readValue(answerStr, ApiAnswer.class);
+    }
+
+    @SneakyThrows
+    ApiAnswer doRequestWithoutWeb(String coord) {
+        final ApiQuestion question = new ApiQuestion(new Person("Ярик", true, coord));
+        return controller.ask(question);
     }
 
     static boolean isValid(String coord, ApiAnswer answer) {
