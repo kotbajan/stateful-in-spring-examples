@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope(scopeName = "singleton", proxyMode = ScopedProxyMode.NO)
+@Scope(scopeName = "prototype", proxyMode = ScopedProxyMode.NO)
 @ToString
 public class BusinessLogic {
     @Autowired @ToString.Exclude WeatherService weatherService;
