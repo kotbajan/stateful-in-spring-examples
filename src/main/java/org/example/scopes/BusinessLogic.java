@@ -25,6 +25,8 @@ public class BusinessLogic {
     private boolean useUmbrella;
 
     public ClothingSet whatShouldIDo(Person person) {
+        assert this.person == null;
+
         this.person = person;
 
         loadWeather();
