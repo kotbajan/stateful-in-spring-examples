@@ -17,7 +17,7 @@ public class FacadeService {
     public ApiAnswer calc(ApiQuestion rq) {
         final ClothingSet result = businessLogic.whatShouldIDo(rq.getPerson());
         final ApiAnswer rs = new ApiAnswer(result);
-        log.debug("In: {}, Out: {}", rq, rs);
+        log.debug("In: {}, Out: {}, {}", rq, rs, businessLogic);
         return rs;
     }
 }

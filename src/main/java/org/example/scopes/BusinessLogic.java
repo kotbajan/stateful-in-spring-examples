@@ -1,5 +1,6 @@
 package org.example.scopes;
 
+import lombok.ToString;
 import org.example.scopes.model.Person;
 import org.example.scopes.model.ClothingSet;
 import org.example.scopes.wear.ClothesStyle;
@@ -13,26 +14,44 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(scopeName = "singleton", proxyMode = ScopedProxyMode.NO)
+@ToString
 public class BusinessLogic {
-    @Autowired WeatherService weatherService;
-    @Autowired WardrobeService wardrobeService;
+    @Autowired @ToString.Exclude WeatherService weatherService;
+    @Autowired @ToString.Exclude WardrobeService wardrobeService;
+
+    private Person person;
+    private Weather weather;
+    private ClothesStyle clothes;
+    private boolean useUmbrella;
 
     public ClothingSet whatShouldIDo(Person person) {
-        // Определить погоду
-        final Weather weather = weatherService.getWeather(person.getCoord());
+        this.person = person;
 
-        ClothesStyle clothes = ClothesStyle.SHORTS;
-        boolean useUmbrella = false;
+        loadWeather();
+        calculate();
+        takeClothes();
+
+        return new ClothingSet(clothes, useUmbrella);
+    }
+
+    private void loadWeather() {
+        // Определить погоду
+        weather = weatherService.getWeather(person.getCoord());
+    }
+
+    private void calculate() {
+        clothes = ClothesStyle.SHORTS;
+        useUmbrella = false;
 
         // В дождь надеть плащь и взять зонт
         if (weather.isRain()) {
             clothes = ClothesStyle.RAINCOAT;
             useUmbrella = true;
         }
+    }
 
+    private void takeClothes() {
         // Взять выбранное из шкафа
         wardrobeService.takeClothes(person, clothes, useUmbrella);
-
-        return new ClothingSet(clothes, useUmbrella);
     }
 }
