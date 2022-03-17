@@ -13,8 +13,12 @@ import org.example.scopes.wear.WardrobeService;
 import org.example.scopes.weather.WeatherService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.SimpleThreadScope;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -36,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 ActionService.class,
                 WardrobeService.class,
                 WeatherService.class,
+                ControllerTest.Config.class,
         }
 )
 @SpringJUnitConfig
@@ -148,5 +153,19 @@ public class ControllerTest {
 
     static boolean isValid(String coord, ApiAnswer answer) {
         return coord.contains("Petersburg") == answer.getResult().isUmbrella();
+    }
+
+    @Configuration
+    public static class Config {
+        @Bean
+        public SimpleThreadScope simpleThreadScope() {
+            return new SimpleThreadScope();
+        }
+        @Bean
+        public static CustomScopeConfigurer scopeConfigurer(SimpleThreadScope threadScope) {
+            CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+            configurer.addScope("thread", threadScope);
+            return configurer;
+        }
     }
 }

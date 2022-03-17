@@ -8,11 +8,12 @@ import org.example.scopes.wear.WardrobeService;
 import org.example.scopes.weather.Weather;
 import org.example.scopes.weather.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 
 @Component
-@RequestScope
+@Scope(scopeName = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @ToString
 public class BusinessLogic {
     @Autowired @ToString.Exclude WeatherService weatherService;
