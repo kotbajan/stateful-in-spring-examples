@@ -12,12 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class FacadeService {
     @Autowired BusinessLogic businessLogic;
+    @Autowired ThreadScope threadScope;
 
     @Transactional
     public ApiAnswer calc(ApiQuestion rq) {
-        final ClothingSet result = businessLogic.whatShouldIDo(rq.getPerson());
-        final ApiAnswer rs = new ApiAnswer(result);
-        log.debug("In: {}, Out: {}, {}", rq, rs, businessLogic);
-        return rs;
+        try(var ignore = threadScope.init()) {
+            final ClothingSet result = businessLogic.whatShouldIDo(rq.getPerson());
+            final ApiAnswer rs = new ApiAnswer(result);
+            log.debug("In: {}, Out: {}, {}", rq, rs, businessLogic);
+            return rs;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

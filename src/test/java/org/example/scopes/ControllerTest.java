@@ -158,11 +158,11 @@ public class ControllerTest {
     @Configuration
     public static class Config {
         @Bean
-        public SimpleThreadScope simpleThreadScope() {
-            return new SimpleThreadScope();
+        public ThreadScope simpleThreadScope() {
+            return new ThreadScope();
         }
         @Bean
-        public static CustomScopeConfigurer scopeConfigurer(SimpleThreadScope threadScope) {
+        public static CustomScopeConfigurer scopeConfigurer(ThreadScope threadScope) {
             CustomScopeConfigurer configurer = new CustomScopeConfigurer();
             configurer.addScope("thread", threadScope);
             return configurer;
