@@ -9,6 +9,7 @@ import org.example.scopes.action.ActionService;
 import org.example.scopes.model.ApiAnswer;
 import org.example.scopes.model.ApiQuestion;
 import org.example.scopes.model.Person;
+import org.example.scopes.steps.*;
 import org.example.scopes.wear.WardrobeService;
 import org.example.scopes.weather.WeatherService;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 WardrobeService.class,
                 WeatherService.class,
                 ControllerTest.Config.class,
+                ActionStep.class,
+                CheckColdStep.class,
+                CheckHungryStep.class,
+                CheckRainStep.class,
+                LoadWeatherStep.class,
+                Step.class,
+                WardrobeStep.class,
         }
 )
 @SpringJUnitConfig
@@ -130,7 +138,7 @@ public class ControllerTest {
 
     @SneakyThrows
     ApiAnswer doRequest(String coord) {
-        final ApiQuestion question = new ApiQuestion(new Person("Ярик", true, coord));
+        final ApiQuestion question = new ApiQuestion(new Person("Ярик", false, coord));
         final String answerStr = this.mockMvc.perform(post("/ask")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +155,7 @@ public class ControllerTest {
 
     @SneakyThrows
     ApiAnswer doRequestWithoutWeb(String coord) {
-        final ApiQuestion question = new ApiQuestion(new Person("Ярик", true, coord));
+        final ApiQuestion question = new ApiQuestion(new Person("Ярик", false, coord));
         return controller.ask(question);
     }
 
