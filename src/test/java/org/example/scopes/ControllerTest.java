@@ -18,7 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.SimpleThreadScope;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -26,9 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -166,6 +168,18 @@ public class ControllerTest {
             CustomScopeConfigurer configurer = new CustomScopeConfigurer();
             configurer.addScope("thread", threadScope);
             return configurer;
+        }
+
+        @Bean(name = "correlationId")
+        @Scope(scopeName = "thread")
+        public String correlationId() {
+            return UUID.randomUUID().toString();
+        }
+
+        @Bean(name = "correlationId")
+        @Scope(scopeName = "thread")
+        public String correlationId(String id) {
+            return id;
         }
     }
 }
