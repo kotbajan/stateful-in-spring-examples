@@ -43,11 +43,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 WeatherService.class,
                 ControllerTest.Config.class,
                 ActionStep.class,
-                CheckColdStep.class,
-                CheckHungryStep.class,
-                CheckRainStep.class,
+                Config.class,
                 LoadWeatherStep.class,
-                Step.class,
+                PlanCalculator.class,
+                UmbrellaCalculator.class,
+                WearCalculator.class,
                 WardrobeStep.class,
         }
 )
